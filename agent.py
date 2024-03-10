@@ -1,6 +1,6 @@
 import numpy as np
 from environment import Environment
-from globals import (ACTION_SET, ACTION_SPACE)
+from globals import (ACTION_SET, ACTION_SPACE, FLOORS)
 
 class QLearningAgent:
 
@@ -12,9 +12,9 @@ class QLearningAgent:
         self.action_space = action_space
         self.alpha = .01
         self.gamma = 1
-        self.explore = .5
+        self.explore = 1
         self.exploit = 1 - self.explore
-        self.epochs = 3
+        self.epochs = 100
         self.start_state = (('A', 1), ('B', 1))  # Initial state without passengers
         self.env = Environment(self.start_state)
         self.init_q_table()
@@ -37,16 +37,18 @@ class QLearningAgent:
 
         for _ in range(self.epochs):
             
-            # Environment chooses passengers based on arrival rate
-            
-
             # Agent chooses action based on epsilon greedy and q-table
             action = self.get_action(state)
-            print("Action Chosen:", action)
 
             # Agent Executes action and Environment returns next state based on state-action
-            next_state = self.env.execute_action(state, action)
+            next_state, reward = self.env.simulate_action(state, action)
+            
+            print(f"OLD STATE = {state}")
+            print(f"REWARD = {reward} | ACTION = {action}")
+            print(f"NEW STATE = {next_state}")
+            print(f"DOORS OPENED A = {self.env.elevatorA.isDoorOpen}, B = {self.env.elevatorB.isDoorOpen}")
             self.env.print_info()
+            
 
             # Environment also returns reward for state-action
             # TODO: reward(next)
@@ -74,5 +76,5 @@ class QLearningAgent:
             ]
 
 
-agent = QLearningAgent(ACTION_SET, ACTION_SPACE, [1, 2, 3, 4, 5, 6], {})
+agent = QLearningAgent(ACTION_SET, ACTION_SPACE, FLOORS, {})
 agent.learn()
