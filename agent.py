@@ -1,12 +1,15 @@
 import numpy as np
 from environment import Environment
+from globals import (ACTION_SET, ACTION_SPACE)
 
 class QLearningAgent:
 
-    def __init__(self, actions, floors, qtable):
-        self.actions = actions
+    def __init__(self, action_set, action_space, floors, qtable):
+
+        self.actions = action_set
         self.floors = floors
         self.q_table = qtable
+        self.action_space = action_space
         self.alpha = .01
         self.gamma = 1
         self.explore = .5
@@ -16,15 +19,17 @@ class QLearningAgent:
         self.env = Environment(self.start_state)
         self.init_q_table()
 
+
+
     def init_q_table(self):
+        # Initialize Q-table
         for floor_A in self.floors:
             for floor_B in self.floors:
                 state = (('A', floor_A), ('B', floor_B))
                 self.q_table[state] = {}
-                for action_A in self.actions:
-                    for action_B in self.actions:
-                        action_pair = (action_A, 'A'), (action_B, 'B')
-                        self.q_table[state][action_pair] = 0
+                for action_pair in self.action_space.flatten():
+                    self.q_table[state][action_pair] = 0
+
 
     def learn(self):
         state = self.start_state
@@ -67,6 +72,7 @@ class QLearningAgent:
                 (max_actions[0][0]),
                 (max_actions[0][1])
             ]
-        
-agent = QLearningAgent(['UP', 'DOWN', 'HOLD', 'DOORS'], [1, 2, 3, 4, 5, 6], {})
+
+
+agent = QLearningAgent(ACTION_SET, ACTION_SPACE, [1, 2, 3, 4, 5, 6], {})
 agent.learn()
