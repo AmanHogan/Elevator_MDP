@@ -1,13 +1,9 @@
 import numpy as np
-from environment import Environment
+from environment import EnvironmentModel
 from globals import * 
 from collections import defaultdict
 from itertools import product
 from joblib import Parallel, delayed
-
-WAITING = 0
-IN_A = 1
-IN_B = 2
 
 class QLearningAgent:
 
@@ -15,27 +11,15 @@ class QLearningAgent:
 
         self.actions = action_set # set of actions [UP, DOWN, HOLD, DOORS]
         self.floors = floors # set of floors
-
-        # avg reward values given action and state, ex: q_table[(('A', 1), ('B', 1), (0,0))][(('UP', 'A'), ('DOWN', 'B'))] = 0
         self.q_table = qtable
-
-        # space of all possible combinations of actions, EX: [(('UP', 'A'), ('DOWN', 'B'))]
         self.action_space = action_space
-
         self.alpha = .01 # learnging rate
         self.gamma = 1 # discounted sum of future rewards
-
-        # epsilon greedy strategy
         self.explore = 1 
         self.exploit = 1 - self.explore
-        self.epochs = 10
-
-        # Initial state
+        self.epochs = 100
         self.start_state = START_STATE
-
-        # Environment object
-        self.env = Environment(self.start_state)
-
+        self.env = EnvironmentModel(self.start_state)
         self.init_q_table()
 
     def init_q_table(self):
@@ -46,8 +30,8 @@ class QLearningAgent:
         # Initialize Q-table
         for floor_A in self.floors:
             for floor_B in self.floors:
-                for door_A in [True, False]:  # 0 for open, 1 for closed
-                    for door_B in [True, False]:  # 0 for open, 1 for closed
+                for door_A in [True, False]:
+                    for door_B in [True, False]:
                         for call_floor_A in self.floors:
                             for exit_floor_A in self.floors:
                                 for call_floor_B in self.floors:

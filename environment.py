@@ -1,18 +1,12 @@
 import numpy as np
 import time
 from globals import * 
-WAITING = 0
-IN_A = 1
-IN_B = 2
 
-class Environment:
+class EnvironmentModel:
 
     def __init__(self, state):
 
         self.curr_state = state
-        self.elevatorA = Elevators("A", state[0][1])
-        self.elevatorB = Elevators("B", state[1][1])
-
         self.new_state = None
         self.current_time = 0
         self.people = [] # a list of people who are wating on an elevator
@@ -54,40 +48,39 @@ class Environment:
             elevator_A_state = ('A', a_floor - 1, a_door)
             
         elif action_A[0] == 'HOLD':
-            pass
-
-        # Check the action for Elevator A
-        elif action_A[0] == 'DOORS':
-
-            ####################################################################################
-            # NOTE: People can only leave and enter the elevator as it is open
-
-            # Door open and going to close and person waiting and call floor same as elevator floor
+            
             if a_door == OPEN and p1_loc == WAITING and p1_call == a_floor:
-                 # adds passenger
                  p1_loc = IN_A
             
-            # Door open and person in A  and elve same as exit floor
-            # Remove person from elevator and premove from list of people
             if a_door == OPEN and p1_loc == IN_A and p1_exit == a_floor:
                 self.people.remove((p1_call, p1_exit, WAITING))
                 p1_call, p1_exit, p1_loc = 0, 0, WAITING
 
-            # Door open and person waiting and call floor same as elevator floor
             if a_door == OPEN and p2_loc == WAITING and p2_call == a_floor:
                  p2_loc = IN_A
             
-            # Door open and person in A  and elve same as exit floor
-            # Remove person from elevator and premove from list of people
             if a_door == OPEN and p2_loc == IN_A and p2_exit == a_floor:
                 self.people.remove((p2_call, p2_exit, WAITING))
                 p2_call, p2_exit, p2_loc = 0, 0, WAITING
 
-            # If door is closed, yopu cant do antyhontg
+        elif action_A[0] == 'DOORS':
+
+            if a_door == OPEN and p1_loc == WAITING and p1_call == a_floor:
+                 p1_loc = IN_A
+            
+         
+            if a_door == OPEN and p1_loc == IN_A and p1_exit == a_floor:
+                self.people.remove((p1_call, p1_exit, WAITING))
+                p1_call, p1_exit, p1_loc = 0, 0, WAITING
+
+            if a_door == OPEN and p2_loc == WAITING and p2_call == a_floor:
+                 p2_loc = IN_A
+            
+            if a_door == OPEN and p2_loc == IN_A and p2_exit == a_floor:
+                self.people.remove((p2_call, p2_exit, WAITING))
+                p2_call, p2_exit, p2_loc = 0, 0, WAITING
 
             elevator_A_state = ('A', a_floor, not a_door)
-        
-        ################# Check the action for Elevator B ##############################################
 
         if action_B[0] == 'UP' and b_floor < NFLOORS and b_door == False:
             elevator_B_state = ('B', b_floor + 1, b_door)
@@ -96,48 +89,43 @@ class Environment:
             elevator_B_state = ('B', b_floor - 1, b_door)
 
         elif action_B[0] == 'HOLD':
-            pass
 
-        # Check the action for Elevator B
-        elif action_B[0] == 'DOORS':
-            
-            ####################################################################################
-            # NOTE: People can only leave and enter the elevator as it is open
-
-            # Door open and going to close and person waiting and call floor same as elevator floor
-            if b_door == OPEN and p1_loc == WAITING and p1_call == b_door:
-                 # adds passenger
+            if b_door == OPEN and p1_loc == WAITING and p1_call == b_floor:
                  p1_loc = IN_B
 
-            # Door open and person in A  and elve same as exit floor
-            # Remove person from elevator and premove from list of people
-            if b_door == OPEN and p1_loc == IN_B and p1_exit == b_door:
+            if b_door == OPEN and p1_loc == IN_B and p1_exit == b_floor:
                 self.people.remove((p1_call, p1_exit, WAITING))
                 p1_call, p1_exit, p1_loc = 0, 0, WAITING
 
-            ############################################################################
-            # Door open and person waiting and call floor same as elevator floor
-            if b_door == OPEN and p2_loc == WAITING and p2_call == b_door:
-                 p2_loc = IN_A
+         
+            if b_door == OPEN and p2_loc == WAITING and p2_call == b_floor:
+                 p2_loc = IN_B
 
-            # Door open and person in A  and elve same as exit floor
-            # Remove person from elevator and premove from list of people
-            if b_door == OPEN and p2_loc == IN_B and p2_exit == b_door:
+          
+            if b_door == OPEN and p2_loc == IN_B and p2_exit == b_floor:
                 self.people.remove((p2_call, p2_exit, WAITING))
                 p2_call, p2_exit, p2_loc = 0, 0, WAITING
 
-            #######################################################################
+        elif action_B[0] == 'DOORS':
             
-            # If door is closed, yopu cant do antyhontg
-          
+            if b_door == OPEN and p1_loc == WAITING and p1_call == b_floor:
+                 p1_loc = IN_B
 
+            if b_door == OPEN and p1_loc == IN_B and p1_exit == b_floor:
+                self.people.remove((p1_call, p1_exit, WAITING))
+                p1_call, p1_exit, p1_loc = 0, 0, WAITING
+
+            
+            if b_door == OPEN and p2_loc == WAITING and p2_call == b_floor:
+                 p2_loc = IN_B
+
+           
+            if b_door == OPEN and p2_loc == IN_B and p2_exit == b_floor:
+                self.people.remove((p2_call, p2_exit, WAITING))
+                p2_call, p2_exit, p2_loc = 0, 0, WAITING
             
             elevator_B_state = ('B', b_floor, not b_door)
 
-            #################################################################################################
-        
-        #################################################################################################
-        
         p1 = p1_call, p1_exit, p1_loc
         p2 = p2_call, p2_exit, p2_loc
         passenger_info = p1, p2
@@ -278,23 +266,5 @@ class Environment:
         return 0
 
 
-class Elevators:
-
-    def __init__(self, name, start):
-        self.name = name
-        self.passengers = []
-        self.floor = start
-        self.timeTaken = 0
-        self.capacity = 0
-        self.doorCount = 0
-        self.isDoorOpen = False
-        self.exit_floor = []
 
 
-class Person:
-
-    def __init__(self, call_floor, exit_floor):
-        self.call_floor = call_floor
-        self.exit_floor = exit_floor
-        self.floor = call_floor
-        self.isInElevator = False
