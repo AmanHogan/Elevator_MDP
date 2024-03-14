@@ -5,7 +5,7 @@ from .. ENVIRONMENT.environment import EnvironmentModel
 from .. HELPER.helper import *
 
 
-class QLearningLambdaAgent:
+class SARSALambdaAgent:
     """
     Agent implements Q(lamdab)-learning and chooses actions to learn from the 
     dual elevator environment model.
@@ -69,7 +69,7 @@ class QLearningLambdaAgent:
     
     def update_q_values(self, state, action, reward, new_state, new_action):
         """
-        Updates the q-table using the bellman update formula for q-lambda-learning.
+        Updates the q-table using the bellman update formula for SARSA(λ)-learning.
 
         Args:
             state (state): snapshot of env
@@ -79,16 +79,11 @@ class QLearningLambdaAgent:
             new_action (action): new action a
         """
 
-        # td = reward + gamma * Q(s', a*) - Q(s,a)
+        # td = reward + gamma * Q(s', a') - Q(s,a)
         temporal_diff = reward + self.gamma * self.q_table[new_state][new_action] - self.q_table[state][action]
 
-        # for all s,a:
-        # Q(s,a) = Q(s,a) + alpha * td * eligibility_trace[s][a]
-        # Update Q-values for all state-action pairs
-        for s in self.q_table:
-            for a in self.q_table[s]:
-                self.q_table[s][a] += self.alpha * temporal_diff * self.eligibility_traces[s][a]
-
+        # Update Q-values for the current state-action pair
+        self.q_table[state][action] += self.alpha * temporal_diff * self.eligibility_traces[state][action]
     
 
     def update_eligibility_traces(self, state, action):
@@ -166,29 +161,29 @@ lambda_val = .5
         
 # Compare Learning Rates
 for i in range(len(alphas)):
-    agent = QLearningLambdaAgent(QTABLE, alphas[i], gamma_fixed, epsilon_fixed, lambda_val)
+    agent = SARSALambdaAgent(QTABLE, alphas[i], gamma_fixed, epsilon_fixed, lambda_val)
     agent.q_lambda_learn()
     agents.append(agent)    
     reset_q_table(i)
     reset_trace_table(agent.eligibility_traces)
-compare_data(agents, 'a', 'Learning Rates', '2i', 'q_lam')
+compare_data(agents, 'a', 'Learning Rates', '2i', 'sarsa_lam')
 
 # Compare Discounted Sums
 agents = []
 for i in range(len(gammas)):
-    agent = QLearningLambdaAgent(QTABLE, alpha_fixed, gammas[i], epsilon_fixed,lambda_val)
+    agent = SARSALambdaAgent(QTABLE, alpha_fixed, gammas[i], epsilon_fixed,lambda_val)
     agent.q_lambda_learn()
     agents.append(agent)
     reset_q_table(i)
     reset_trace_table(agent.eligibility_traces)
-compare_data(agents, 'g', 'Discounted Sums', '2i', 'q_lam')
+compare_data(agents, 'g', 'Discounted Sums', '2i', 'sarsa_lam')
 
 # Compare Epsilon values
 agents = []
 for i in range(len(epsilons)):
-    agent = QLearningLambdaAgent(QTABLE, alpha_fixed, gamma_fixed, epsilons[i],lambda_val)
+    agent = SARSALambdaAgent(QTABLE, alpha_fixed, gamma_fixed, epsilons[i],lambda_val)
     agent.q_lambda_learn()
     agents.append(agent)    
     reset_q_table(i)
     reset_trace_table(agent.eligibility_traces)
-compare_data(agents, 'e', 'Epsilon Values', '2i', 'q_lam')
+compare_data(agents, 'e', 'Epsilon Values', '2i', 'sarsa_lam')

@@ -32,7 +32,7 @@ OPEN = True
 CLOSED = False
 """ Door is closed """
 
-ITERATIONS = 100
+ITERATIONS = 3
 """ Number of steps in the simulation """
 
 EXIT_FLOORS = [2,3,4,5,6]
