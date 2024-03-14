@@ -1,3 +1,5 @@
+"""Performs Q learning for the elevator problem"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 from .. ENVIRONMENT.globals import *
@@ -6,7 +8,7 @@ from .. HELPER.helper import *
 
 class QLearningAgent:
     """
-    Agent implments Q-learning and chooses actions to learn from the 
+    Agent implments Q learning and chooses actions to learn from the 
     dual elevator envirnoment model.
     """
 
@@ -25,15 +27,15 @@ class QLearningAgent:
         self.gamma = gamma
         self.explore = epsilon
         self.exploit = 1 - self.explore
-        self.epochs = ITERATIONS
+        self.iterations = ITERATIONS 
         self.start_state = START_STATE
         self.env = EnvironmentModel(self.start_state)
-        self.avg_times = []
+        self.avg_wait_times = [] # avg time to find exit floor
         self.iteration_list = [i*TIMESTEP for i in range(ITERATIONS)]
-        self.avg_rewards = []
-        self.rewards = []
+        self.avg_rewards = [] # avg rewards per iteration
+        self.rewards = [] # reward per iteration
 
-    def get_action(self, state):
+    def policy(self, state):
         """
         Chooses action based on epsilon-greedy method.
         Args: state (state): snapshot of environment
@@ -43,69 +45,44 @@ class QLearningAgent:
         strategy = np.random.choice(STRATEGY, 1, p=[self.explore, self.exploit])
 
         if strategy == EXPLORE:
-            return [(np.random.choice(ACTION_SET), 'A'), (np.random.choice(ACTION_SET), 'B')]
+            return tuple([(np.random.choice(ACTION_SET), 'A'), (np.random.choice(ACTION_SET), 'B')])
         
         else:
             max_actions = max(self.q_table[state].items(), key=lambda x: x[1])
-            return [(max_actions[0][0]),(max_actions[0][1])]
-
-    def update_q_table(self, state, action, reward, new_state):
-        """
-        Updates the q-table using the bellman update formula for q-learning.
-
-        Args:
-            state (state): snapshot of env
-            action (action): action taken
-            reward (float): reward for taking action a
-            new_state (state): new state arrived in from action a
-        """
-
-        # Q_current = Q(s,a)
-        current_q_value = self.q_table[state][action]
-
-        # max_a [Q(s', a)] || q value from the given list of actions using s'
-        max_next_q_value = max(self.q_table[new_state].values())
-
-        # UPDATE:
-        # Q_new = Q_current + alpha * (reward + gamma * max_a[Q(s', a)] - Q_curr)
-        new_q_value = current_q_value + self.alpha * (reward + self.gamma * max_next_q_value - current_q_value)
-
-
-        self.q_table[state][action] = new_q_value
+            return tuple([(max_actions[0][0]),(max_actions[0][1])])
 
     def q_learn(self):
         """
         Performs q learning to find optimal actions for each elevator at given timesteps
         """
-
-        # 1. Initialize start state
+        # 1. Initialize s
         state = self.start_state
-        print_state_info(state, None, 0, 0)
-        self.env.print_environment(state)
 
-        # NOTE: Each step taken results in a terminal state in my implementation
-        # NOTE: Im using iterations rather than episodes which is a valid approach
+        print_state(state, None, 0, 0)
+        print_environment(state, self.env.current_time)
 
         # 2. Continue for certain iterations or convergence
-        for _ in range(self.epochs):
+        for _ in range(self.iterations):
 
             # 3. Choose action a from s using policy
-            action = self.get_action(state)
+            action = self.policy(state)
 
             # 4. Take action a and observe reward and s'
-            next_state, reward = self.env.get_new_state_and_reward(state, action)
-            print_state_info(state, next_state, reward, action)
-            self.env.print_environment(next_state)
+            next_state, reward = self.env.step(state, action)
+          
+            # 5. Q(s,a) = Q(s,a) + alpha * [r + gamma * max_a'(Q(s',a') - Q(s,a))]
+            q_new = self.q_table[state][action] + self.alpha * (reward + self.gamma*max(self.q_table[next_state].values()) - self.q_table[state][action])
+            self.q_table[state][action] = q_new
+            
+            print_state(state, next_state, reward, action)
+            print_environment(next_state, self.env.current_time)
 
-            # 5. Update Qtable using qlearning bellman update
-            self.update_q_table(state, tuple(action), reward, next_state)
-
-            # 6. Set s = s'
+            # 6. s = s'
             state = next_state
             
             # Keep track of learning
             self.rewards.append(reward)
-            self.avg_times.append((self.env.current_time + TIMESTEP)/(self.env.t_l+1))
+            self.avg_wait_times.append((self.env.current_time + TIMESTEP)/(self.env.t_l+1))
             self.avg_rewards.append(sum(self.rewards) / (_ + 1))
 
 
@@ -144,4 +121,3 @@ for i in range(len(epsilons)):
     agents.append(agent)    
     reset_q_table(i)
 compare_data(agents, 'e', 'Epsilon Values', '2i', 'qlearn')
-

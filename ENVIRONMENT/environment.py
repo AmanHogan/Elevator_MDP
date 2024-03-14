@@ -184,7 +184,7 @@ class EnvironmentModel:
         new_state = (elevator_A_state, elevator_B_state, passenger_info)
         return new_state
 
-    def get_new_state_and_reward(self, state, action):
+    def step(self, state, action):
         """
         Gets a new state and reward based on passenger simualtion and agent action.\n
         Args:
@@ -341,12 +341,12 @@ class EnvironmentModel:
 
         total_passengers = self.elev_a_passengers + self.elev_b_passengers
 
-        MOVEMENT_REWARD = 10
+        MOVEMENT_REWARD = 2
         MOVEMENT_PENALTY = 1
-        PASSENGER_PICKUP_REWARD = 10
-        DOOR_OPEN_PENALTY = 5
-        PASSENGER_DROP_OFF_REWARD = 10
-        DOOR_HOLD_PENALTY = 5
+        PASSENGER_PICKUP_REWARD = 2
+        DOOR_OPEN_PENALTY = 1
+        PASSENGER_DROP_OFF_REWARD = 2
+        DOOR_HOLD_PENALTY = 1
 
         # Calculate reward based on the action and the new state
         reward = 0

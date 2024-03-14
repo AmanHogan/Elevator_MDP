@@ -1,3 +1,5 @@
+"""Performs SARSA learning for the elevator problem"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 from .. ENVIRONMENT.globals import *
@@ -6,7 +8,7 @@ from .. HELPER.helper import *
 
 class SARSALearningAgent:
     """
-    Agent implments Q-learning and chooses actions to learn from the 
+    Agent implments SARSA learning and chooses actions to learn from the 
     dual elevator envirnoment model.
     """
 
@@ -25,15 +27,15 @@ class SARSALearningAgent:
         self.gamma = gamma
         self.explore = epsilon
         self.exploit = 1 - self.explore
-        self.epochs = ITERATIONS
+        self.iterations = ITERATIONS
         self.start_state = START_STATE
         self.env = EnvironmentModel(self.start_state)
-        self.avg_times = []
+        self.avg_wait_times = [] # avg time to find exit floor
         self.iteration_list = [i*TIMESTEP for i in range(ITERATIONS)]
-        self.avg_rewards = []
-        self.rewards = []
+        self.avg_rewards = []  # avg rewards per iteration
+        self.rewards = [] # reward per iteration
 
-    def get_action(self, state):
+    def policy(self, state):
         """
         Chooses action based on epsilon-greedy method.
         Args: state (state): snapshot of environment
@@ -43,74 +45,51 @@ class SARSALearningAgent:
         strategy = np.random.choice(STRATEGY, 1, p=[self.explore, self.exploit])
 
         if strategy == EXPLORE:
-            return [(np.random.choice(ACTION_SET), 'A'), (np.random.choice(ACTION_SET), 'B')]
+            return tuple([(np.random.choice(ACTION_SET), 'A'), (np.random.choice(ACTION_SET), 'B')])
         
         else:
             max_actions = max(self.q_table[state].items(), key=lambda x: x[1])
-            return [(max_actions[0][0]),(max_actions[0][1])]
+            return tuple([(max_actions[0][0]),(max_actions[0][1])])
             
-    def update_q_table(self, state, action, reward, new_state, new_action):
-        """Updates the q-table using the bellman update formula for sarsa-learning.
-
-        Args:
-            state (state): snapshot of env
-            action (action): action taken
-            reward (float): reward for taking action a
-            new_state (state): new state arrived in from action a
-            new_action (action): new action taken
-        """
-
-        # Q_current = Q(s,a)
-        current_q_value = self.q_table[state][action]
-
-        # Q_next = Q(s',a')
-        next_q_value = self.q_table[new_state][new_action]
-
-        # Q_new = Q_current + alpha * (reward + gamma * Q_next - Q_current)
-        new_q_value = current_q_value + self.alpha * (reward + self.gamma * next_q_value - current_q_value)
-        
-        # Q_new
-        self.q_table[state][action] = new_q_value
-
+ 
     def sarsa_learn(self):
         """
         Performs SARSA learning to find optimal actions for each elevator at given timesteps
         """
 
-        # 1. Initialize start state
+        # 1. Initialize s
         state = self.start_state
-        print_state_info(state, None, 0, 0)
-        self.env.print_environment(state)
 
-        # NOTE: Each step taken results in a terminal state
-        # NOTE: Im using iterations rather than episodes which is a valid approach
+        # 2. Choose action a from s using policy
+        action = self.policy(state)
 
-        # 2. Continue for certain iterations or convergence
-        for _ in range(self.epochs):
+        print_state(state, None, 0, 0)
+        print_environment(state, self.env.current_time)
 
-            # 3. Choose action a from s using policy
-            action = self.get_action(state)
+        # 3. Continue for certain iterations or convergence
+        for _ in range(self.iterations):
 
             # 4. Take action a and observe r and s'
-            next_state, reward = self.env.get_new_state_and_reward(state, action)
+            next_state, reward = self.env.step(state, action)
 
             # 5. Choose a' from s' using policy
-            next_action = self.get_action(next_state)
-            print_state_info(state, next_state, reward, action)
-            self.env.print_environment(next_state)
+            next_action = self.policy(next_state)
+            
+            # 6. Q(s,a) = Q(s,a) + alpha [r + gamma * Q(s',a') - Q(s,a)]
+            q_new = self.q_table[state][action] + self.alpha * (reward + self.gamma * self.q_table[next_state][next_action] - self.q_table[state][action])
+            self.q_table[state][action] = q_new
+            
+            print_state(state, next_state, reward, action)
+            print_environment(next_state, self.env.current_time)
 
-            # 6. Bellman Update for SARSA
-            self.update_q_table(state, tuple(action), reward, next_state, tuple(next_action))
-
-            # 7. update state, s = s' and a = a'
+            # 7. s = s' , a = a'
             state = next_state
             action = next_action
 
             # Keep track of learning
             self.rewards.append(reward)
-            self.avg_times.append((agent.env.current_time + TIMESTEP)/(agent.env.t_l+1))
+            self.avg_wait_times.append((agent.env.current_time + TIMESTEP)/(agent.env.t_l+1))
             self.avg_rewards.append(sum(self.rewards) / (_ + 1))
-
 
 alphas = [.01,.1,.3,.5,1] # learning rates
 gammas = [.01,.1,.3,.5,1] # discounted sums
@@ -122,7 +101,6 @@ alpha_fixed = .1
 gamma_fixed = 1
 epsilon_fixed = .5
         
-
 # Compare Learning Rates
 for i in range(len(alphas)):
     agent = SARSALearningAgent(QTABLE, alphas[i], gamma_fixed, epsilon_fixed)

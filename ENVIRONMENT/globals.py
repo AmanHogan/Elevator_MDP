@@ -32,7 +32,7 @@ OPEN = True
 CLOSED = False
 """ Door is closed """
 
-ITERATIONS = 3
+ITERATIONS = 1000
 """ Number of steps in the simulation """
 
 EXIT_FLOORS = [2,3,4,5,6]
@@ -60,12 +60,42 @@ for action_a in range(len(ACTION_SET)):
     for action_b in range(len(ACTION_SET)):
         ACTION_SPACE[action_a][action_b] = (ACTION_SET[action_a], 'A'), (ACTION_SET[action_b], 'B')
 
-FLOORS = [1, 2, 3, 4, 5, 6]
+FLOORS = [1, 2, 3,4,5,6]
 """The floors each elevator will move through"""
 
 FLOORS_ZERO = [0,1,2,3,4,5,6]
 """The floors each elevator will move through with a zero to include non-valid states for computation"""
 
+# FOR Q LAMBDA AND SARSA LAMDA LOOK AT THIS NOTE
+# NOTE: FOR Q LAMDA AND SARSA LAMBDA: Because of the large state space and size of the e(s,a), it will take a long time using 6 floors. Uncomment this code to 
+# see the q(lambda) algoirthm with a reduced state space size (Going from 6 floors to 3)
+
+# NFLOORS = 3
+# """Number of floors in envirnoment"""
+
+# ARRIVAL_RATE = .1
+# """Rate at which people arrive per second"""
+
+# START_FLOORS = [1]
+# """ The floors that people call from """
+
+# START_PROB = [1]
+# """ Chance of someone calling from that floor """
+
+# ITERATIONS = 10
+# """ Number of steps in the simulation """
+
+# EXIT_FLOORS = [2,3]
+# """ The floors that people exit from """
+
+# EXIT_PROB = [.5, .5]
+# """ Chance of someone exiting from that floor """
+
+# FLOORS = [1, 2, 3]
+# """The floors each elevator will move through"""
+
+# FLOORS_ZERO = [0, 1, 2, 3]
+# """The floors each elevator will move through with a zero to include non-valid states for computation"""
 
 # STATE FORMAT: (('A',<FLOOR>,<DOOR>),('B',<FLOOR>,<DOOR>),((<CALL>,<EXIT>,<LOCATION>),(<CALL>,<EXIT>,<LOCATION>)))
 # ACTION FORMAT: [(<ELEV ACTION>, 'A'), (<ELEV ACTION, 'B')]
