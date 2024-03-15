@@ -8,6 +8,13 @@ from .. HELPER.helper import *
 
 # NOTE: To speed up efficiency, reduce the state space using the isntructions in globals.py
 
+# CONSTANTS FOR 2i
+ARRIVAL_RATE = .1
+START_FLOORS = [1]
+START_PROB = [1]
+EXIT_FLOORS = [2,3,4,5,6]
+EXIT_PROB = [.20, .20, .20, .20, .20]
+
 class QLearningLambdaAgent:
     """
     Agent implements Q(lamdbda) learning and chooses actions to learn from the 

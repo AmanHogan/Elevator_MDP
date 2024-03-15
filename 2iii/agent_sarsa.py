@@ -3,15 +3,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from .. ENVIRONMENT.globals import *
-from .. ENVIRONMENT.environment import EnvironmentModel
+from .environment import EnvironmentModel
 from .. HELPER.helper import *
 
-# CONSTANTS FOR 2i
-ARRIVAL_RATE = .1
-START_FLOORS = [1]
-START_PROB = [1]
-EXIT_FLOORS = [2,3,4,5,6]
-EXIT_PROB = [.20, .20, .20, .20, .20]
+# CONSTANTS FOR 2iii
+ARRIVAL_RATE = .025
+
 
 class SARSALearningAgent:
     """
@@ -114,7 +111,7 @@ for i in range(len(alphas)):
     agent.sarsa_learn()
     agents.append(agent)    
     reset_q_table(i)
-compare_data(agents, 'a', 'Learning Rates', '2i', 'sarsa')
+compare_data(agents, 'a', 'Learning Rates', '2iii', 'sarsa')
 
 # Compare Discounted Sums
 agents = []
@@ -123,7 +120,7 @@ for i in range(len(gammas)):
     agent.sarsa_learn()
     agents.append(agent)    
     reset_q_table(i)
-compare_data(agents, 'g', 'Discounted Sums', '2i', 'sarsa')
+compare_data(agents, 'g', 'Discounted Sums', '2iii', 'sarsa')
 
 # Compare Epsilon values
 agents = []
@@ -132,4 +129,4 @@ for i in range(len(epsilons)):
     agent.sarsa_learn()
     agents.append(agent)    
     reset_q_table(i)
-compare_data(agents, 'e', 'Epsilon Values', '2i', 'sarsa')
+compare_data(agents, 'e', 'Epsilon Values', '2iii', 'sarsa')

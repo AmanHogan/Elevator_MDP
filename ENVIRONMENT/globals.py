@@ -4,7 +4,30 @@ sys.dont_write_bytecode = True
 import numpy as np
 import sys
 
+# STATE FORMAT: (('A',<FLOOR>,<DOOR>),('B',<FLOOR>,<DOOR>),((<CALL>,<EXIT>,<LOCATION>),(<CALL>,<EXIT>,<LOCATION>)))
+# ACTION FORMAT: [(<ELEV ACTION>, 'A'), (<ELEV ACTION, 'B')]
+# QTABLE FORMAT: (('A',<F>,<D>),('B',<F>,<D>),((<C>,<E>,<L>),(<C>,<E>,<L>)))[(<E ACTION>,'A'),(<E ACTION, 'B')]
 
+########################### REWARD VARS ###########################
+MOVEMENT_REWARD = 10
+""" Reward for elevator moving the right direction"""
+
+MOVEMENT_PENALTY = 1
+""" Penalty for elevator moving in the wrong direction"""
+
+PASSENGER_PICKUP_REWARD = 10
+"""Reward for picking up a passenger"""
+
+DOOR_OPEN_PENALTY = 2
+""" Penalty for opening the door when there is no one there"""
+
+PASSENGER_DROP_OFF_REWARD = 10
+""" Reward for dropping off a passenger on their call floor """
+
+DOOR_HOLD_PENALTY = 2
+""" Penalty for holding the door for no reason """
+
+########################### ELEVATOR VARS ###########################
 NFLOORS = 6
 """Number of floors in envirnoment"""
 
@@ -17,6 +40,19 @@ START_FLOORS = [1]
 START_PROB = [1]
 """ Chance of someone calling from that floor """
 
+EXIT_FLOORS = [2,3,4,5,6]
+""" The floors that people exit from """
+
+EXIT_PROB = [.20, .20, .20, .20, .20]
+""" Chance of someone exiting from that floor """
+
+FLOORS = [1, 2, 3,4,5,6]
+"""The floors each elevator will move through"""
+
+FLOORS_ZERO = [0,1,2,3,4,5,6]
+"""The floors each elevator will move through with a zero to include non-valid states for computation"""
+
+######################### ELEVATOR CONSTANTS (DO NOT CHANGE) ##############################
 WAITING = 0
 """ Person is waiting outside the elevator"""
 
@@ -32,22 +68,6 @@ OPEN = True
 CLOSED = False
 """ Door is closed """
 
-ITERATIONS = 1000
-""" Number of steps in the simulation """
-
-EXIT_FLOORS = [2,3,4,5,6]
-""" The floors that people exit from """
-
-EXIT_PROB = [.20, .20, .20, .20, .20]
-""" Chance of someone exiting from that floor """
-
-TIMESTEP = 5
-""" How many seconds pass for each timestep"""
-
-STRATEGY = ['explore', 'exploit']
-EXPLORE = 'explore'
-EXPLOIT = 'exploit'
-
 START_STATE = (('A', 1, False), ('B', 1, False), ((0,0,WAITING),(0,0,WAITING)))
 """Format: (('A',<FLOOR>,<DOOR>),('B',<FLOOR>,<DOOR>),((<CALL>,<EXIT>,<LOCATION>),(<CALL>,<EXIT>,<LOCATION>)))"""
 
@@ -60,15 +80,25 @@ for action_a in range(len(ACTION_SET)):
     for action_b in range(len(ACTION_SET)):
         ACTION_SPACE[action_a][action_b] = (ACTION_SET[action_a], 'A'), (ACTION_SET[action_b], 'B')
 
-FLOORS = [1, 2, 3,4,5,6]
-"""The floors each elevator will move through"""
+######################### SIMULATOR VARS ##############################
 
-FLOORS_ZERO = [0,1,2,3,4,5,6]
-"""The floors each elevator will move through with a zero to include non-valid states for computation"""
+ITERATIONS = 3000
+""" Number of steps in the simulation """
 
+TIMESTEP = 5
+""" How many seconds pass for each timestep"""
+
+STRATEGY = ['explore', 'exploit']
+EXPLORE = 'explore'
+EXPLOIT = 'exploit'
+
+###################### Q LAMBDA AND SARSA LAMBDA VARIABLES ######################
 # FOR Q LAMBDA AND SARSA LAMDA LOOK AT THIS NOTE
-# NOTE: FOR Q LAMDA AND SARSA LAMBDA: Because of the large state space and size of the e(s,a), it will take a long time using 6 floors. Uncomment this code to 
-# see the q(lambda) algoirthm with a reduced state space size (Going from 6 floors to 3)
+# NOTE: FOR Q LAMDA AND SARSA LAMBDA: Because of the large state 
+# space and size of the e(s,a), it will take a
+# long time using 6 floors. Uncomment this code to 
+# see the q(lambda) algoirthm with a reduced state 
+# space size (Going from 6 floors to 3)
 
 # NFLOORS = 3
 # """Number of floors in envirnoment"""
@@ -97,9 +127,7 @@ FLOORS_ZERO = [0,1,2,3,4,5,6]
 # FLOORS_ZERO = [0, 1, 2, 3]
 # """The floors each elevator will move through with a zero to include non-valid states for computation"""
 
-# STATE FORMAT: (('A',<FLOOR>,<DOOR>),('B',<FLOOR>,<DOOR>),((<CALL>,<EXIT>,<LOCATION>),(<CALL>,<EXIT>,<LOCATION>)))
-# ACTION FORMAT: [(<ELEV ACTION>, 'A'), (<ELEV ACTION, 'B')]
-# QTABLE FORMAT: (('A',<F>,<D>),('B',<F>,<D>),((<C>,<E>,<L>),(<C>,<E>,<L>)))[(<E ACTION>,'A'),(<E ACTION, 'B')]
+############################################ QTABLE ############################################
 QTABLE = {}
 """
 Q-table that keeps track of the avg rewards of each state-action value.

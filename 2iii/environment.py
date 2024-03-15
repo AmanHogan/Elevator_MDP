@@ -4,7 +4,7 @@ import sys
 sys.dont_write_bytecode = True
 import numpy as np
 import time
-from .globals import * 
+from ..ENVIRONMENT.globals import * 
 import numpy as np
 
 class EnvironmentModel:
@@ -266,6 +266,7 @@ class EnvironmentModel:
         Adds these people to the the people list in envirnoment. Max of 2 people in system
         """
 
+
         elevator_A_state, elevator_B_state, p_floors = state
         new_people = []
 
@@ -284,6 +285,28 @@ class EnvironmentModel:
             if sum(arrivals) + len(self.people) <= 2:
                 for person in arrivals:
                     if person == 1:
+
+                        worker = np.random.choice(['call-from-floor-2', 'call-from-floor-2-to-6'], 1, p=[.50, .50])
+                        
+                        # 50% call from floor 2 and leave with uniform dist
+                        if worker == 'call-from-floor-2':
+                            START_FLOORS = [2]
+                            EXIT_FLOORS = [1,3,4,5,6]
+                            START_PROB = [1]
+                            EXIT_PROB = [.20, .20, .20, .20, .20]
+
+                            call_floor = np.random.choice(START_FLOORS, 1, p=START_PROB)
+                            exit_floor = np.random.choice(EXIT_FLOORS, 1, p=EXIT_PROB)
+
+                        # 50% call from other floors and exit on 1
+                        else:
+                            START_FLOORS = [2,3,4,5,6]
+                            EXIT_FLOORS = [1]
+                            START_PROB = [.20, .20, .20, .20, .20]
+                            EXIT_PROB = [1]
+                            call_floor = np.random.choice(START_FLOORS, 1, p=START_PROB)
+                            exit_floor = np.random.choice(EXIT_FLOORS, 1, p=EXIT_PROB)
+                        
                         call_floor = int(np.random.choice(START_FLOORS, 1, p=START_PROB))
                         exit_floor = int(np.random.choice(EXIT_FLOORS, 1, p=EXIT_PROB))
                         self.people.append((call_floor, exit_floor, WAITING))

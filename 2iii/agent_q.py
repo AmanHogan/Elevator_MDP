@@ -1,21 +1,19 @@
-"""Performs SARSA learning for the elevator problem"""
+"""Performs Q learning for the elevator problem"""
 
 import numpy as np
 import matplotlib.pyplot as plt
 from .. ENVIRONMENT.globals import *
-from .. ENVIRONMENT.environment import EnvironmentModel
+from .environment import EnvironmentModel
 from .. HELPER.helper import *
 
-# CONSTANTS FOR 2i
-ARRIVAL_RATE = .1
-START_FLOORS = [1]
-START_PROB = [1]
-EXIT_FLOORS = [2,3,4,5,6]
-EXIT_PROB = [.20, .20, .20, .20, .20]
 
-class SARSALearningAgent:
+# CONSTANTS FOR 2iii
+ARRIVAL_RATE = .025
+
+
+class QLearningAgent:
     """
-    Agent implments SARSA learning and chooses actions to learn from the 
+    Agent implments Q learning and chooses actions to learn from the 
     dual elevator envirnoment model.
     """
 
@@ -34,12 +32,12 @@ class SARSALearningAgent:
         self.gamma = gamma
         self.explore = epsilon
         self.exploit = 1 - self.explore
-        self.iterations = ITERATIONS
+        self.iterations = ITERATIONS 
         self.start_state = START_STATE
         self.env = EnvironmentModel(self.start_state)
         self.avg_wait_times = [] # avg time to find exit floor
         self.iteration_list = [i*TIMESTEP for i in range(ITERATIONS)]
-        self.avg_rewards = []  # avg rewards per iteration
+        self.avg_rewards = [] # avg rewards per iteration
         self.rewards = [] # reward per iteration
 
     def policy(self, state):
@@ -57,79 +55,74 @@ class SARSALearningAgent:
         else:
             max_actions = max(self.q_table[state].items(), key=lambda x: x[1])
             return tuple([(max_actions[0][0]),(max_actions[0][1])])
-            
- 
-    def sarsa_learn(self):
-        """
-        Performs SARSA learning to find optimal actions for each elevator at given timesteps
-        """
 
+    def q_learn(self):
+        """
+        Performs q learning to find optimal actions for each elevator at given timesteps
+        """
         # 1. Initialize s
         state = self.start_state
-
-        # 2. Choose action a from s using policy
-        action = self.policy(state)
 
         print_state(state, None, 0, 0)
         print_environment(state, self.env.current_time)
 
-        # 3. Continue for certain iterations or convergence
+        # 2. Continue for certain iterations or convergence
         for _ in range(self.iterations):
 
-            # 4. Take action a and observe r and s'
-            next_state, reward = self.env.step(state, action)
+            # 3. Choose action a from s using policy
+            action = self.policy(state)
 
-            # 5. Choose a' from s' using policy
-            next_action = self.policy(next_state)
-            
-            # 6. Q(s,a) = Q(s,a) + alpha [r + gamma * Q(s',a') - Q(s,a)]
-            q_new = self.q_table[state][action] + self.alpha * (reward + self.gamma * self.q_table[next_state][next_action] - self.q_table[state][action])
+            # 4. Take action a and observe reward and s'
+            next_state, reward = self.env.step(state, action)
+          
+            # 5. Q(s,a) = Q(s,a) + alpha * [r + gamma * max_a'(Q(s',a') - Q(s,a))]
+            q_new = self.q_table[state][action] + self.alpha * (reward + self.gamma*max(self.q_table[next_state].values()) - self.q_table[state][action])
             self.q_table[state][action] = q_new
             
             print_state(state, next_state, reward, action)
             print_environment(next_state, self.env.current_time)
 
-            # 7. s = s' , a = a'
+            # 6. s = s'
             state = next_state
-            action = next_action
-
+            
             # Keep track of learning
             self.rewards.append(reward)
-            self.avg_wait_times.append((agent.env.current_time + TIMESTEP)/(agent.env.t_l+1))
+            self.avg_wait_times.append((self.env.current_time + TIMESTEP)/(self.env.t_l+1))
             self.avg_rewards.append(sum(self.rewards) / (_ + 1))
+  
 
-alphas = [.01,.1,.3,.5,1] # learning rates
-gammas = [.01,.1,.3,.5,1] # discounted sums
-epsilons = [.1,.3,.5,.8,1] # exploration rates
+alphas = [.1, .3, .5, .9] # learning rates
+gammas = [.1, .3, .5, .9] # discounted sums
+epsilons = [.1, .3, .5, .9] # exploration rates
 agents = [] 
 
 # Fixed variables to compare trials
-alpha_fixed = .1
-gamma_fixed = 1
+alpha_fixed = .3
+gamma_fixed = .3
 epsilon_fixed = .5
-        
+
 # Compare Learning Rates
 for i in range(len(alphas)):
-    agent = SARSALearningAgent(QTABLE, alphas[i], gamma_fixed, epsilon_fixed)
-    agent.sarsa_learn()
+    agent = QLearningAgent(QTABLE, alphas[i], gamma_fixed, epsilon_fixed)
+    agent.q_learn()
     agents.append(agent)    
     reset_q_table(i)
-compare_data(agents, 'a', 'Learning Rates', '2i', 'sarsa')
+compare_data(agents, 'a', 'Learning Rates', '2iii', 'qlearn')
 
 # Compare Discounted Sums
 agents = []
 for i in range(len(gammas)):
-    agent = SARSALearningAgent(QTABLE, alpha_fixed, gammas[i], epsilon_fixed)
-    agent.sarsa_learn()
+    agent = QLearningAgent(QTABLE, alpha_fixed, gammas[i], epsilon_fixed)
+    agent.q_learn()
     agents.append(agent)    
     reset_q_table(i)
-compare_data(agents, 'g', 'Discounted Sums', '2i', 'sarsa')
+compare_data(agents, 'g', 'Discounted Sums', '2iii', 'qlearn')
 
 # Compare Epsilon values
 agents = []
 for i in range(len(epsilons)):
-    agent = SARSALearningAgent(QTABLE, alpha_fixed, gamma_fixed, epsilons[i])
-    agent.sarsa_learn()
+    agent = QLearningAgent(QTABLE, alpha_fixed, gamma_fixed, epsilons[i])
+    agent.q_learn()
     agents.append(agent)    
     reset_q_table(i)
-compare_data(agents, 'e', 'Epsilon Values', '2i', 'sarsa')
+compare_data(agents, 'e', 'Epsilon Values', '2iii', 'qlearn')

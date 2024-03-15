@@ -3,17 +3,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from .. ENVIRONMENT.globals import *
-from .. ENVIRONMENT.environment import EnvironmentModel
+from .environment import EnvironmentModel
 from .. HELPER.helper import *
 
 # NOTE: To speed up efficiency, reduce the state space using the isntructions in globals.py
 
-# CONSTANTS FOR 2i
-ARRIVAL_RATE = .1
-START_FLOORS = [1]
-START_PROB = [1]
-EXIT_FLOORS = [2,3,4,5,6]
-EXIT_PROB = [.20, .20, .20, .20, .20]
+# CONSTANTS FOR 2iii
+ARRIVAL_RATE = .025
+
 
 class SARSALambdaAgent:
     """
@@ -144,7 +141,7 @@ for i in range(len(alphas)):
     agents.append(agent)    
     reset_q_table(i)
     reset_trace_table(agent.e_trace)
-compare_data(agents, 'a', 'Learning Rates', '2i', 'sarsa_lam')
+compare_data(agents, 'a', 'Learning Rates', '2iii', 'sarsa_lam')
 
 # Compare Discounted Sums
 agents = []
@@ -154,7 +151,7 @@ for i in range(len(gammas)):
     agents.append(agent)
     reset_q_table(i)
     reset_trace_table(agent.e_trace)
-compare_data(agents, 'g', 'Discounted Sums', '2i', 'sarsa_lam')
+compare_data(agents, 'g', 'Discounted Sums', '2iii', 'sarsa_lam')
 
 # Compare Epsilon values
 agents = []
@@ -164,4 +161,4 @@ for i in range(len(epsilons)):
     agents.append(agent)    
     reset_q_table(i)
     reset_trace_table(agent.e_trace)
-compare_data(agents, 'e', 'Epsilon Values', '2i', 'sarsa_lam')
+compare_data(agents, 'e', 'Epsilon Values', '2iii', 'sarsa_lam')

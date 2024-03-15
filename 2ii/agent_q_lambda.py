@@ -1,4 +1,4 @@
-"""Performs SARSA lambda learning given the elevator problem. Change the variables in globals.py for your paramaters. """
+"""Performs Q lambda learning given the elevator problem. Change the variables in globals.py for your paramaters. """
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,17 +8,17 @@ from .. HELPER.helper import *
 
 # NOTE: To speed up efficiency, reduce the state space using the isntructions in globals.py
 
-# CONSTANTS FOR 2i
-ARRIVAL_RATE = .1
-START_FLOORS = [1]
-START_PROB = [1]
-EXIT_FLOORS = [2,3,4,5,6]
-EXIT_PROB = [.20, .20, .20, .20, .20]
+# CONSTANTS FOR 2ii
+ARRIVAL_RATE = .5
+START_FLOORS = [2,3,4,5,6]
+START_PROB = [.20, .20, .20, .20, .20]
+EXIT_FLOORS = [1]
+EXIT_PROB = [1]
 
-class SARSALambdaAgent:
+class QLearningLambdaAgent:
     """
-    Agent implements SARSA(lambda) learning and chooses actions to learn from the 
-    dual elevator environment model. 
+    Agent implements Q(lamdbda) learning and chooses actions to learn from the 
+    dual elevator environment model.
     """
 
     def __init__(self, qtable, alpha, gamma, epsilon, lambda_val):
@@ -76,12 +76,12 @@ class SARSALambdaAgent:
             max_actions = max(self.q_table[state].items(), key=lambda x: x[1])
             return tuple([(max_actions[0][0]),(max_actions[0][1])])
     
-    def sarsa_lambda_learn(self):
+    def q_lambda_learn(self):
         """
-        Performs SARSA(lamda) learning to find optimal actions for each elevator at given timesteps
+        Performs Q(lamda) learning to find optimal actions for each elevator at given timesteps
         """
 
-        # 1. Initialize a, a
+        # 1. Initialize s, a
         state = self.start_state
         action = self.policy(state)
 
@@ -90,34 +90,42 @@ class SARSALambdaAgent:
 
         # 2. Continue for certain iterations or convergence
         for _ in range(self.iterations):
-                        
-            # 3. Take action a and observe r and s'
+            
+            # 3. Take action a and observe r, s'
             next_state, reward = self.env.step(state, action)
 
             # 4. Choose a' from s' using policy
             next_action = self.policy(next_state)
 
-            # 5. td = r + gamma * Q(s',a') - Q(s,a)
-            td = reward + self.gamma * self.q_table[next_state][next_action] - self.q_table[state][action]
+            # 5. a* = arg max_b (s', b)
+            best_next_action = tuple(max(self.q_table[next_state].items(), key=lambda x: x[1])[0])
 
-            # 6. e(s,a) = e(s,a) + 1
+            # 6. td = r + gamma * Q(s',a*) - Q(s,a)
+            td = reward + self.gamma * self.q_table[next_state][best_next_action] - self.q_table[state][action]
+
+            # 7. e(s,a) = e(s,a) + 1
             self.e_trace[state][action] = self.e_trace[state][action] + 1
-            
-            # 7. for all s, a
+  
+            # 8. for all s, a
             print("Updating Q(s,a) by looping through all (s,a). This may take some time ...")
             for s in self.q_table:
                 for a in self.q_table[s]:
 
-                    # 8. Q(s,a) = Q(s,a) + alpha * td * e(s,a)
+                    # 9. Q(s,a) = Q(s,a) + alpha * td * e(s,a)
                     self.q_table[s][a] += self.alpha * td * self.e_trace[s][a]
 
-                    # 9. e(s,a) = gamma * lambda * e(s,a)
-                    self.e_trace[s][a] = self.gamma * self.lambda_val * self.e_trace[s][a] 
-            
+                    # 10. if: a' = a* then e(s,a) = gamma * lambda * e(s,a)
+                    if next_action == best_next_action:
+                        self.e_trace[s][a] *= self.lambda_val * self.gamma
+
+                    # 11. else: e(s,a) = 0
+                    else:
+                        self.e_trace[s][a] = 0
+
             print_state(state, next_state, reward, action)
             print_environment(next_state, self.env.current_time)
 
-            # 10. s = s', a = a'
+            # 12. s = s', a = a'
             state = next_state
             action = next_action
 
@@ -139,29 +147,29 @@ lambda_val = .5
         
 # Compare Learning Rates
 for i in range(len(alphas)):
-    agent = SARSALambdaAgent(QTABLE, alphas[i], gamma_fixed, epsilon_fixed, lambda_val)
-    agent.sarsa_lambda_learn()
+    agent = QLearningLambdaAgent(QTABLE, alphas[i], gamma_fixed, epsilon_fixed, lambda_val)
+    agent.q_lambda_learn()
     agents.append(agent)    
     reset_q_table(i)
     reset_trace_table(agent.e_trace)
-compare_data(agents, 'a', 'Learning Rates', '2i', 'sarsa_lam')
+compare_data(agents, 'a', 'Learning Rates', '2ii', 'q_lam')
 
 # Compare Discounted Sums
 agents = []
 for i in range(len(gammas)):
-    agent = SARSALambdaAgent(QTABLE, alpha_fixed, gammas[i], epsilon_fixed,lambda_val)
-    agent.sarsa_lambda_learn()
+    agent = QLearningLambdaAgent(QTABLE, alpha_fixed, gammas[i], epsilon_fixed,lambda_val)
+    agent.q_lambda_learn()
     agents.append(agent)
     reset_q_table(i)
     reset_trace_table(agent.e_trace)
-compare_data(agents, 'g', 'Discounted Sums', '2i', 'sarsa_lam')
+compare_data(agents, 'g', 'Discounted Sums', '2ii', 'q_lam')
 
 # Compare Epsilon values
 agents = []
 for i in range(len(epsilons)):
-    agent = SARSALambdaAgent(QTABLE, alpha_fixed, gamma_fixed, epsilons[i],lambda_val)
-    agent.sarsa_lambda_learn()
+    agent = QLearningLambdaAgent(QTABLE, alpha_fixed, gamma_fixed, epsilons[i],lambda_val)
+    agent.q_lambda_learn()
     agents.append(agent)    
     reset_q_table(i)
     reset_trace_table(agent.e_trace)
-compare_data(agents, 'e', 'Epsilon Values', '2i', 'sarsa_lam')
+compare_data(agents, 'e', 'Epsilon Values', '2ii', 'q_lam')

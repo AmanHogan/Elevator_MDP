@@ -51,7 +51,8 @@ def graph_avg_wait_times(agents, exp_type, title, problem_no, algo):
     plt.ylabel("Average time to transport person (s)")
     plt.title(f"AVG Time VS Iterations for {title}")
     plt.savefig(filename) 
-    plt.show()
+    #plt.show()
+    plt.clf()
     
 def graph_avg_rewards(agents, exp_type, title, problem_no, algo):
     """
@@ -85,7 +86,9 @@ def graph_avg_rewards(agents, exp_type, title, problem_no, algo):
     plt.ylabel("Average Reward")
     plt.title(f"Average Reward vs Iterations for {title}")
     plt.savefig(filename) 
-    plt.show()
+    #plt.show()
+    plt.clf()
+
 
 def print_agent_info(agents, exp_type, problem_no, algo):
     """
@@ -132,8 +135,6 @@ def reset_trace_table(e_trace):
         for action_pair in e_trace[state]:
             e_trace[state][action_pair] = 0
 
-
-
 def print_state(state, next_state, reward, action):
 
     """Prints details about the current state
@@ -149,8 +150,6 @@ def print_state(state, next_state, reward, action):
     print(f"REWARD = {reward} | ACTION = {action}")
     print(f"NEW STATE = {next_state}")
     print("-------------------------------------------------------------------")
-
-
 
 def print_environment(state, curr_time):
     """
