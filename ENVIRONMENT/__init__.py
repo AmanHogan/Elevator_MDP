@@ -1,0 +1,1 @@
+""" Contains the environment.py (Models the envirnoment) and globals.py (initial variable) """
