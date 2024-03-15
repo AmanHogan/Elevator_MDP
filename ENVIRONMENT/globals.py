@@ -80,6 +80,7 @@ for action_a in range(len(ACTION_SET)):
     for action_b in range(len(ACTION_SET)):
         ACTION_SPACE[action_a][action_b] = (ACTION_SET[action_a], 'A'), (ACTION_SET[action_b], 'B')
 
+print(len(ACTION_SPACE))
 ######################### SIMULATOR VARS ##############################
 
 ITERATIONS = 3000
