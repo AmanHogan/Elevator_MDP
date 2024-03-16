@@ -1,0 +1,55 @@
+-------------------------------------------------------
+AGENT NUMBER: 0 | LEARNING RATE = 0.01
+AGENT NUMBER: 0 | DISCOUNT SUM = 1
+AGENT NUMBER: 0 | EPSILON VAL = 0.5
+Total People that called elevator 2
+Total People who arrived at exit floor 0
+AVG time in elevator per person: 1.0 SECS or 4.25 MINS
+Total Simulation/Learning time: 250 SECS or 4.17 MINS or 0.07 HOURS
+List of times people spent waiting: []
+Total people who found their exit: 0
+-------------------------------------------------------
+-------------------------------------------------------
+AGENT NUMBER: 1 | LEARNING RATE = 0.1
+AGENT NUMBER: 1 | DISCOUNT SUM = 1
+AGENT NUMBER: 1 | EPSILON VAL = 0.5
+Total People that called elevator 2
+Total People who arrived at exit floor 0
+AVG time in elevator per person: 1.0 SECS or 4.25 MINS
+Total Simulation/Learning time: 250 SECS or 4.17 MINS or 0.07 HOURS
+List of times people spent waiting: []
+Total people who found their exit: 0
+-------------------------------------------------------
+-------------------------------------------------------
+AGENT NUMBER: 2 | LEARNING RATE = 0.3
+AGENT NUMBER: 2 | DISCOUNT SUM = 1
+AGENT NUMBER: 2 | EPSILON VAL = 0.5
+Total People that called elevator 4
+Total People who arrived at exit floor 2
+AVG time in elevator per person: 17.0 SECS or 1.42 MINS
+Total Simulation/Learning time: 250 SECS or 4.17 MINS or 0.07 HOURS
+List of times people spent waiting: [25, 25]
+Total people who found their exit: 2
+-------------------------------------------------------
+-------------------------------------------------------
+AGENT NUMBER: 3 | LEARNING RATE = 0.5
+AGENT NUMBER: 3 | DISCOUNT SUM = 1
+AGENT NUMBER: 3 | EPSILON VAL = 0.5
+Total People that called elevator 1
+Total People who arrived at exit floor 1
+AVG time in elevator per person: 0.5 SECS or 2.12 MINS
+Total Simulation/Learning time: 250 SECS or 4.17 MINS or 0.07 HOURS
+List of times people spent waiting: []
+Total people who found their exit: 1
+-------------------------------------------------------
+-------------------------------------------------------
+AGENT NUMBER: 4 | LEARNING RATE = 1
+AGENT NUMBER: 4 | DISCOUNT SUM = 1
+AGENT NUMBER: 4 | EPSILON VAL = 0.5
+Total People that called elevator 2
+Total People who arrived at exit floor 0
+AVG time in elevator per person: 1.0 SECS or 4.25 MINS
+Total Simulation/Learning time: 250 SECS or 4.17 MINS or 0.07 HOURS
+List of times people spent waiting: []
+Total people who found their exit: 0
+-------------------------------------------------------

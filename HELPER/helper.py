@@ -21,7 +21,7 @@ def compare_data(agents, exp_type, title, problem_no, algo):
 
 def graph_avg_wait_times(agents, exp_type, title, problem_no, algo):
     """
-    Graphs agent avg times to a file for a given experiment
+    Graphs agent avg wait times to a file for a given experiment
 
     Args:
         agents (list[agents]): list of agents
@@ -31,21 +31,21 @@ def graph_avg_wait_times(agents, exp_type, title, problem_no, algo):
         algo (str): alogirthm used, ex: qlearn, qlambda, sarsa
     """
 
-    if exp_type =='a':
+    if exp_type =='alpha':
         for i in range(len(agents)):
             plt.plot(np.array(agents[i].iteration_list), np.array(agents[i].avg_wait_times), label=str(agents[i].alpha))
 
-    if exp_type == 'g':
+    if exp_type == 'gamma':
         for i in range(len(agents)):
             plt.plot(np.array(agents[i].iteration_list), np.array(agents[i].avg_wait_times), label=str(agents[i].gamma))
 
-    if exp_type == 'e':
+    if exp_type == 'explore':
         for i in range(len(agents)):
             plt.plot(np.array(agents[i].iteration_list), np.array(agents[i].avg_wait_times), label=str(agents[i].explore))
     
     directory = "./project_1/output/"
     os.makedirs(directory, exist_ok=True)
-    filename = str(f"{directory}times_{algo}_exp_{exp_type}_problem_{problem_no}.png")
+    filename = str(f"{directory}{algo}avg_times_{exp_type}_{problem_no}.png")
     plt.legend()
     plt.xlabel("Iterations (#)")
     plt.ylabel("Average time to transport person (s)")
@@ -66,21 +66,21 @@ def graph_avg_rewards(agents, exp_type, title, problem_no, algo):
         algo (str): alogirthm used, ex: qlearn, qlambda, sarsa
     """
 
-    if exp_type =='a':
+    if exp_type =='alpha':
         for i in range(len(agents)):
             plt.plot(np.array(agents[i].iteration_list), np.array(agents[i].avg_rewards), label=str(agents[i].alpha))
 
-    if exp_type == 'g':
+    if exp_type == 'gamma':
         for i in range(len(agents)):
             plt.plot(np.array(agents[i].iteration_list), np.array(agents[i].avg_rewards), label=str(agents[i].gamma))
 
-    if exp_type == 'e':
+    if exp_type == 'explore':
         for i in range(len(agents)):
             plt.plot(np.array(agents[i].iteration_list), np.array(agents[i].avg_rewards), label=str(agents[i].explore))
     
     directory = "./project_1/output/"
     os.makedirs(directory, exist_ok=True)
-    filename = str(f"{directory}rewards_{algo}_exp_{exp_type}_problem_{problem_no}.png")
+    filename = str(f"{directory}{algo}avg_rewards_{exp_type}_{problem_no}.png")
     plt.legend()
     plt.xlabel("Iterations")
     plt.ylabel("Average Reward")
@@ -88,7 +88,6 @@ def graph_avg_rewards(agents, exp_type, title, problem_no, algo):
     plt.savefig(filename) 
     #plt.show()
     plt.clf()
-
 
 def print_agent_info(agents, exp_type, problem_no, algo):
     """
@@ -103,7 +102,7 @@ def print_agent_info(agents, exp_type, problem_no, algo):
 
     directory = "./project_1/output/"
     os.makedirs(directory, exist_ok=True)
-    filename = str(f"{directory}{problem_no}_{algo}_{exp_type}") + ".txt"
+    filename = str(f"{directory}{algo}details_{exp_type}_{problem_no}.txt")
 
     file = open(filename,"w")
     for i in range(len(agents)):
@@ -111,10 +110,12 @@ def print_agent_info(agents, exp_type, problem_no, algo):
         file.write(f"AGENT NUMBER: {i} | LEARNING RATE = {agents[i].alpha}\n")
         file.write(f"AGENT NUMBER: {i} | DISCOUNT SUM = {agents[i].gamma}\n")
         file.write(f"AGENT NUMBER: {i} | EPSILON VAL = {agents[i].explore}\n")
-        file.write("Total People that called elevator {}\n".format(agents[i].env.t_p))
-        file.write("Total People who arrived at exit floor {}\n".format(agents[i].env.t_l))
-        file.write(f"AVG time in elevator per person: {round(((agents[i].env.current_time + float(TIMESTEP))/(agents[i].env.t_l+float(1))), 2)} SECS or {round(((agents[i].env.current_time + float(TIMESTEP))/(agents[i].env.t_l+float(1)))/60, 2)} MINS\n")
+        file.write("Total People that called elevator {}\n".format(agents[i].env.total_people))
+        file.write("Total People who arrived at exit floor {}\n".format(agents[i].env.total_exits))
+        file.write(f"AVG time in elevator per person: {round(((sum(agents[i].env.total_wait_times_list) + 1)/(agents[i].env.total_exits + 1)), 2)} SECS or {round(((sum(agents[i].env.total_wait_times_list) + 1)/(agents[i].env.total_exits + 1))/60, 2)} MINS\n")
         file.write(f"Total Simulation/Learning time: {round(agents[i].env.current_time,2)} SECS or {round(agents[i].env.current_time/60,2)} MINS or {round((agents[i].env.current_time/60)/60,2)} HOURS\n")
+        file.write(f"List of times people spent waiting: {agents[i].env.total_wait_times_list}\n")
+        file.write(f"Total people who found their exit: {agents[i].env.total_exits}\n")
         file.write("-------------------------------------------------------\n")
     file.close()
 
@@ -168,7 +169,7 @@ def print_environment(state, curr_time):
     p1_call, p1_exit, p1_loc = p1
     p2_call, p2_exit, p2_loc = p2
 
-    print("TIME =", curr_time)
+    print(f"TIME = {curr_time} SECONDS")
 
     for floor in range(NFLOORS,0, -1):
         print(floor,"-", end="")

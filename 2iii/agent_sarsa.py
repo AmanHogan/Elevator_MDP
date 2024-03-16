@@ -92,7 +92,7 @@ class SARSALearningAgent:
 
             # Keep track of learning
             self.rewards.append(reward)
-            self.avg_wait_times.append((agent.env.current_time + TIMESTEP)/(agent.env.t_l+1))
+            self.avg_wait_times.append((sum(self.env.total_wait_times_list)+1)/(self.env.total_exits+1))
             self.avg_rewards.append(sum(self.rewards) / (_ + 1))
 
 alphas = [.01,.1,.3,.5,1] # learning rates
@@ -111,7 +111,7 @@ for i in range(len(alphas)):
     agent.sarsa_learn()
     agents.append(agent)    
     reset_q_table(i)
-compare_data(agents, 'a', 'Learning Rates', '2iii', 'sarsa')
+compare_data(agents, 'alpha', 'Learning Rates', '2iii', 'sarsa/')
 
 # Compare Discounted Sums
 agents = []
@@ -120,7 +120,7 @@ for i in range(len(gammas)):
     agent.sarsa_learn()
     agents.append(agent)    
     reset_q_table(i)
-compare_data(agents, 'g', 'Discounted Sums', '2iii', 'sarsa')
+compare_data(agents, 'gamma', 'Discounted Sums', '2iii', 'sarsa/')
 
 # Compare Epsilon values
 agents = []
@@ -129,4 +129,4 @@ for i in range(len(epsilons)):
     agent.sarsa_learn()
     agents.append(agent)    
     reset_q_table(i)
-compare_data(agents, 'e', 'Epsilon Values', '2iii', 'sarsa')
+compare_data(agents, 'explore', 'Epsilon Values', '2iii', 'sarsa/')

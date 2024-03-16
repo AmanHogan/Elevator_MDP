@@ -1,0 +1,44 @@
+-------------------------------------------------------
+AGENT NUMBER: 0 | LEARNING RATE = 0.3
+AGENT NUMBER: 0 | DISCOUNT SUM = 0.1
+AGENT NUMBER: 0 | EPSILON VAL = 0.5
+Total People that called elevator 101
+Total People who arrived at exit floor 99
+AVG time in elevator per person: 415.51 SECS or 6.93 MINS
+Total Simulation/Learning time: 50000 SECS or 833.33 MINS or 13.89 HOURS
+List of times people spent waiting: [180, 525, 55, 2795, 750, 1325, 765, 1155, 205, 705, 200, 625, 535, 110, 260, 190, 205, 135, 200, 355, 835, 890, 225, 870, 2325, 410, 135, 65, 330, 255, 850, 1475, 200, 125, 125, 190, 190, 180, 300, 670, 440, 95, 295, 280, 140, 100, 140, 115, 255, 735, 925, 905, 50, 155, 125, 665, 910, 430, 440, 110, 265, 85, 50, 620, 20, 100, 60, 235, 70, 1260, 215, 35, 135, 655, 725, 2340, 670, 95, 195, 430, 505, 500, 1490, 655, 25, 290, 330, 265]
+Total people who found their exit: 99
+-------------------------------------------------------
+-------------------------------------------------------
+AGENT NUMBER: 1 | LEARNING RATE = 0.3
+AGENT NUMBER: 1 | DISCOUNT SUM = 0.3
+AGENT NUMBER: 1 | EPSILON VAL = 0.5
+Total People that called elevator 90
+Total People who arrived at exit floor 89
+AVG time in elevator per person: 525.4 SECS or 8.76 MINS
+Total Simulation/Learning time: 50000 SECS or 833.33 MINS or 13.89 HOURS
+List of times people spent waiting: [170, 240, 720, 2515, 755, 310, 135, 430, 95, 1290, 385, 325, 120, 150, 325, 1465, 95, 175, 160, 155, 1735, 540, 175, 145, 215, 200, 260, 190, 590, 145, 1130, 140, 3725, 205, 205, 375, 375, 65, 70, 165, 445, 985, 415, 555, 1935, 355, 740, 740, 235, 980, 210, 210, 710, 120, 65, 130, 245, 120, 95, 145, 180, 125, 740, 40, 9695, 3250, 215, 75, 205, 85, 165, 165, 125, 190, 190, 125, 655, 40, 760, 160]
+Total people who found their exit: 89
+-------------------------------------------------------
+-------------------------------------------------------
+AGENT NUMBER: 2 | LEARNING RATE = 0.3
+AGENT NUMBER: 2 | DISCOUNT SUM = 0.5
+AGENT NUMBER: 2 | EPSILON VAL = 0.5
+Total People that called elevator 74
+Total People who arrived at exit floor 72
+AVG time in elevator per person: 696.32 SECS or 11.61 MINS
+Total Simulation/Learning time: 50000 SECS or 833.33 MINS or 13.89 HOURS
+List of times people spent waiting: [125, 1350, 425, 1065, 5445, 1545, 300, 95, 115, 570, 470, 120, 190, 390, 3715, 45, 210, 105, 1770, 920, 920, 505, 90, 45, 1170, 1085, 1275, 725, 1885, 1180, 285, 285, 870, 2730, 1295, 545, 175, 55, 500, 2150, 625, 105, 1805, 60, 60, 1185, 180, 35, 2795, 645, 310, 135, 855, 20, 515, 75, 195, 1375, 1375, 1500, 240]
+Total people who found their exit: 72
+-------------------------------------------------------
+-------------------------------------------------------
+AGENT NUMBER: 3 | LEARNING RATE = 0.3
+AGENT NUMBER: 3 | DISCOUNT SUM = 0.9
+AGENT NUMBER: 3 | EPSILON VAL = 0.5
+Total People that called elevator 47
+Total People who arrived at exit floor 45
+AVG time in elevator per person: 778.72 SECS or 12.98 MINS
+Total Simulation/Learning time: 50000 SECS or 833.33 MINS or 13.89 HOURS
+List of times people spent waiting: [470, 490, 95, 260, 675, 385, 275, 445, 1375, 890, 890, 125, 535, 45, 515, 380, 1170, 190, 15490, 910, 1500, 545, 410, 765, 370, 370, 655, 235, 1675, 1075, 285, 1135, 300, 165, 725]
+Total people who found their exit: 45
+-------------------------------------------------------
