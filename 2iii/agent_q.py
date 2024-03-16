@@ -87,7 +87,7 @@ class QLearningAgent:
             
             # Keep track of learning
             self.rewards.append(reward)
-            self.avg_wait_times.append((self.env.current_time + TIMESTEP)/(self.env.t_l+1))
+            self.avg_wait_times.append((sum(self.env.total_wait_times_list)+1)/(self.env.total_exits+1))
             self.avg_rewards.append(sum(self.rewards) / (_ + 1))
   
 
@@ -107,7 +107,7 @@ for i in range(len(alphas)):
     agent.q_learn()
     agents.append(agent)    
     reset_q_table(i)
-compare_data(agents, 'a', 'Learning Rates', '2iii', 'qlearn')
+compare_data(agents, 'alpha', 'Learning Rates', '2iii', 'q/')
 
 # Compare Discounted Sums
 agents = []
@@ -116,7 +116,7 @@ for i in range(len(gammas)):
     agent.q_learn()
     agents.append(agent)    
     reset_q_table(i)
-compare_data(agents, 'g', 'Discounted Sums', '2iii', 'qlearn')
+compare_data(agents, 'gamma', 'Discounted Sums', '2iii', 'q/')
 
 # Compare Epsilon values
 agents = []
@@ -125,4 +125,4 @@ for i in range(len(epsilons)):
     agent.q_learn()
     agents.append(agent)    
     reset_q_table(i)
-compare_data(agents, 'e', 'Epsilon Values', '2iii', 'qlearn')
+compare_data(agents, 'explore', 'Epsilon Values', '2iii', 'q/')

@@ -12,7 +12,7 @@ import sys
 MOVEMENT_REWARD = 10
 """ Reward for elevator moving the right direction"""
 
-MOVEMENT_PENALTY = 1
+MOVEMENtotal_peopleENALTY = 1
 """ Penalty for elevator moving in the wrong direction"""
 
 PASSENGER_PICKUP_REWARD = 10
@@ -80,10 +80,9 @@ for action_a in range(len(ACTION_SET)):
     for action_b in range(len(ACTION_SET)):
         ACTION_SPACE[action_a][action_b] = (ACTION_SET[action_a], 'A'), (ACTION_SET[action_b], 'B')
 
-print(len(ACTION_SPACE))
 ######################### SIMULATOR VARS ##############################
 
-ITERATIONS = 3000
+ITERATIONS = 10000
 """ Number of steps in the simulation """
 
 TIMESTEP = 5
@@ -94,39 +93,16 @@ EXPLORE = 'explore'
 EXPLOIT = 'exploit'
 
 ###################### Q LAMBDA AND SARSA LAMBDA VARIABLES ######################
-# FOR Q LAMBDA AND SARSA LAMDA LOOK AT THIS NOTE
-# NOTE: FOR Q LAMDA AND SARSA LAMBDA: Because of the large state 
-# space and size of the e(s,a), it will take a
-# long time using 6 floors. Uncomment this code to 
-# see the q(lambda) algoirthm with a reduced state 
-# space size (Going from 6 floors to 3)
-
+# NOTE: For lambda Algorithms, you can uncomment this code to run with a smaller state space
 # NFLOORS = 3
-# """Number of floors in envirnoment"""
-
 # ARRIVAL_RATE = .1
-# """Rate at which people arrive per second"""
-
 # START_FLOORS = [1]
-# """ The floors that people call from """
-
 # START_PROB = [1]
-# """ Chance of someone calling from that floor """
-
 # ITERATIONS = 10
-# """ Number of steps in the simulation """
-
 # EXIT_FLOORS = [2,3]
-# """ The floors that people exit from """
-
 # EXIT_PROB = [.5, .5]
-# """ Chance of someone exiting from that floor """
-
 # FLOORS = [1, 2, 3]
-# """The floors each elevator will move through"""
-
 # FLOORS_ZERO = [0, 1, 2, 3]
-# """The floors each elevator will move through with a zero to include non-valid states for computation"""
 
 ############################################ QTABLE ############################################
 QTABLE = {}
@@ -150,3 +126,4 @@ for floor_A in FLOORS:
                                         QTABLE[state] = {}
                                         for action_pair in ACTION_SPACE.flatten():
                                             QTABLE[state][action_pair] = 0
+                                            

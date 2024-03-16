@@ -6,14 +6,12 @@ from .. ENVIRONMENT.globals import *
 from .. ENVIRONMENT.environment import EnvironmentModel
 from .. HELPER.helper import *
 
-# NOTE: To speed up efficiency, reduce the state space using the isntructions in globals.py
-
 # CONSTANTS FOR 2i
 ARRIVAL_RATE = .1
 START_FLOORS = [1]
 START_PROB = [1]
 EXIT_FLOORS = [2,3,4,5,6]
-EXIT_PROB = [.20, .20, .20, .20, .20]
+EXIT_PROB = [.20,.20,.20,.20,.20]
 
 class SARSALambdaAgent:
     """
@@ -122,7 +120,7 @@ class SARSALambdaAgent:
             action = next_action
 
             self.rewards.append(reward)
-            self.avg_wait_times.append((agent.env.current_time + TIMESTEP) / (agent.env.t_l + 1))
+            self.avg_wait_times.append((sum(self.env.total_wait_times_list)+1)/(self.env.total_exits+1))
             self.avg_rewards.append(sum(self.rewards) / (_ + 1))
 
 
@@ -144,7 +142,7 @@ for i in range(len(alphas)):
     agents.append(agent)    
     reset_q_table(i)
     reset_trace_table(agent.e_trace)
-compare_data(agents, 'a', 'Learning Rates', '2i', 'sarsa_lam')
+compare_data(agents, 'alpha', 'Learning Rates', '2i', 'sarsa_lambda/')
 
 # Compare Discounted Sums
 agents = []
@@ -154,7 +152,7 @@ for i in range(len(gammas)):
     agents.append(agent)
     reset_q_table(i)
     reset_trace_table(agent.e_trace)
-compare_data(agents, 'g', 'Discounted Sums', '2i', 'sarsa_lam')
+compare_data(agents, 'gamma', 'Discounted Sums', '2i', 'sarsa_lambda/')
 
 # Compare Epsilon values
 agents = []
@@ -164,4 +162,4 @@ for i in range(len(epsilons)):
     agents.append(agent)    
     reset_q_table(i)
     reset_trace_table(agent.e_trace)
-compare_data(agents, 'e', 'Epsilon Values', '2i', 'sarsa_lam')
+compare_data(agents, 'explore', 'Epsilon Values', '2i', 'sarsa_lambda/')

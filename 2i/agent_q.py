@@ -6,7 +6,6 @@ from .. ENVIRONMENT.globals import *
 from .. ENVIRONMENT.environment import EnvironmentModel
 from .. HELPER.helper import *
 
-
 # CONSTANTS FOR 2i
 ARRIVAL_RATE = .1
 START_FLOORS = [1]
@@ -91,13 +90,13 @@ class QLearningAgent:
             
             # Keep track of learning
             self.rewards.append(reward)
-            self.avg_wait_times.append((self.env.current_time + TIMESTEP)/(self.env.t_l+1))
+            self.avg_wait_times.append((sum(self.env.total_wait_times_list)+1)/(self.env.total_exits+1))
             self.avg_rewards.append(sum(self.rewards) / (_ + 1))
   
 
-alphas = [.1, .3, .5, .9] # learning rates
-gammas = [.1, .3, .5, .9] # discounted sums
-epsilons = [.1, .3, .5, .9] # exploration rates
+alphas = [.01,.1,.3,.5,.9] # learning rates
+gammas = [.01,.1,.3,.5,.9] # discounted sums
+epsilons = [.01,.1,.3,.5,.9] # exploration rates
 agents = [] 
 
 # Fixed variables to compare trials
@@ -111,7 +110,7 @@ for i in range(len(alphas)):
     agent.q_learn()
     agents.append(agent)    
     reset_q_table(i)
-compare_data(agents, 'a', 'Learning Rates', '2i', 'qlearn')
+compare_data(agents, 'alpha', 'Learning Rates', '2i', 'q/')
 
 # Compare Discounted Sums
 agents = []
@@ -120,7 +119,7 @@ for i in range(len(gammas)):
     agent.q_learn()
     agents.append(agent)    
     reset_q_table(i)
-compare_data(agents, 'g', 'Discounted Sums', '2i', 'qlearn')
+compare_data(agents, 'gamma', 'Discounted Sums', '2i', 'q/')
 
 # Compare Epsilon values
 agents = []
@@ -129,4 +128,6 @@ for i in range(len(epsilons)):
     agent.q_learn()
     agents.append(agent)    
     reset_q_table(i)
-compare_data(agents, 'e', 'Epsilon Values', '2i', 'qlearn')
+compare_data(agents, 'explore', 'Epsilon Values', '2i', 'q/')
+
+print()

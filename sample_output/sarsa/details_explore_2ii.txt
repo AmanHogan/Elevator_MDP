@@ -1,0 +1,55 @@
+-------------------------------------------------------
+AGENT NUMBER: 0 | LEARNING RATE = 0.1
+AGENT NUMBER: 0 | DISCOUNT SUM = 1
+AGENT NUMBER: 0 | EPSILON VAL = 0.1
+Total People that called elevator 77
+Total People who arrived at exit floor 75
+AVG time in elevator per person: 633.43 SECS or 10.56 MINS
+Total Simulation/Learning time: 50000 SECS or 833.33 MINS or 13.89 HOURS
+List of times people spent waiting: [805, 1060, 355, 1745, 300, 2895, 375, 1210, 300, 475, 965, 965, 1315, 2935, 175, 640, 870, 255, 195, 455, 990, 520, 345, 1905, 2925, 545, 740, 545, 195, 1445, 990, 990, 1365, 410, 285, 225, 240, 1855, 475, 480, 660, 555, 365, 365, 330, 330, 340, 510, 820, 500, 960, 250, 280, 650, 650, 530, 800, 75, 75, 925, 1670, 340, 400]
+Total people who found their exit: 75
+-------------------------------------------------------
+-------------------------------------------------------
+AGENT NUMBER: 1 | LEARNING RATE = 0.1
+AGENT NUMBER: 1 | DISCOUNT SUM = 1
+AGENT NUMBER: 1 | EPSILON VAL = 0.3
+Total People that called elevator 122
+Total People who arrived at exit floor 122
+AVG time in elevator per person: 285.54 SECS or 4.76 MINS
+Total Simulation/Learning time: 50000 SECS or 833.33 MINS or 13.89 HOURS
+List of times people spent waiting: [280, 540, 315, 315, 115, 195, 735, 175, 1005, 1005, 60, 190, 75, 370, 370, 1580, 390, 525, 560, 50, 130, 130, 130, 130, 220, 445, 200, 190, 190, 180, 635, 390, 610, 180, 455, 90, 490, 135, 135, 150, 220, 535, 165, 450, 600, 50, 325, 590, 155, 275, 1050, 265, 590, 1370, 1525, 325, 115, 115, 185, 345, 665, 405, 200, 375, 145, 325, 710, 710, 195, 195, 50, 95, 240, 240, 65, 650, 300, 50, 40, 245, 100, 195, 160, 1135, 325, 145, 145, 530, 290, 320, 485, 890, 180, 100, 905]
+Total people who found their exit: 122
+-------------------------------------------------------
+-------------------------------------------------------
+AGENT NUMBER: 2 | LEARNING RATE = 0.1
+AGENT NUMBER: 2 | DISCOUNT SUM = 1
+AGENT NUMBER: 2 | EPSILON VAL = 0.5
+Total People that called elevator 110
+Total People who arrived at exit floor 110
+AVG time in elevator per person: 284.56 SECS or 4.74 MINS
+Total Simulation/Learning time: 50000 SECS or 833.33 MINS or 13.89 HOURS
+List of times people spent waiting: [365, 650, 160, 1795, 520, 380, 380, 60, 240, 120, 120, 105, 720, 305, 280, 985, 50, 690, 625, 725, 20, 95, 255, 410, 195, 195, 175, 215, 190, 1125, 220, 220, 100, 50, 50, 190, 115, 285, 20, 160, 280, 985, 55, 385, 185, 55, 650, 150, 715, 40, 40, 60, 60, 60, 60, 120, 120, 115, 255, 295, 905, 50, 280, 425, 285, 365, 35, 170, 95, 630, 1225, 85, 170, 310, 85, 140, 690, 70, 485, 735, 40, 445, 985, 450, 195, 500, 200, 2915, 175, 50, 150]
+Total people who found their exit: 110
+-------------------------------------------------------
+-------------------------------------------------------
+AGENT NUMBER: 3 | LEARNING RATE = 0.1
+AGENT NUMBER: 3 | DISCOUNT SUM = 1
+AGENT NUMBER: 3 | EPSILON VAL = 0.8
+Total People that called elevator 95
+Total People who arrived at exit floor 94
+AVG time in elevator per person: 283.12 SECS or 4.72 MINS
+Total Simulation/Learning time: 50000 SECS or 833.33 MINS or 13.89 HOURS
+List of times people spent waiting: [90, 225, 155, 460, 90, 505, 85, 765, 1130, 185, 300, 90, 655, 240, 700, 240, 450, 105, 2525, 175, 185, 290, 60, 485, 135, 290, 255, 255, 460, 30, 205, 880, 85, 1490, 500, 95, 275, 75, 390, 375, 350, 1705, 210, 250, 250, 45, 515, 515, 655, 695, 415, 175, 60, 455, 355, 160, 200, 180, 550, 645, 220, 145, 1880, 40, 65, 175]
+Total people who found their exit: 94
+-------------------------------------------------------
+-------------------------------------------------------
+AGENT NUMBER: 4 | LEARNING RATE = 0.1
+AGENT NUMBER: 4 | DISCOUNT SUM = 1
+AGENT NUMBER: 4 | EPSILON VAL = 1
+Total People that called elevator 133
+Total People who arrived at exit floor 132
+AVG time in elevator per person: 255.38 SECS or 4.26 MINS
+Total Simulation/Learning time: 50000 SECS or 833.33 MINS or 13.89 HOURS
+List of times people spent waiting: [215, 105, 105, 190, 190, 525, 30, 70, 765, 425, 100, 100, 70, 75, 225, 165, 1460, 2120, 290, 385, 445, 235, 400, 275, 150, 260, 285, 70, 720, 70, 170, 145, 40, 70, 355, 210, 40, 50, 250, 310, 70, 1680, 165, 320, 765, 1130, 175, 155, 90, 390, 85, 860, 300, 140, 300, 345, 580, 70, 210, 1320, 50, 110, 1075, 1075, 75, 475, 430, 430, 395, 150, 830, 855, 210, 40, 40, 145, 145, 80, 745, 190, 385, 45, 190, 145, 95, 250, 445, 475, 210, 210, 165, 800, 1020, 400, 130, 75, 70]
+Total people who found their exit: 132
+-------------------------------------------------------

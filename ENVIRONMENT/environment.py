@@ -19,8 +19,13 @@ class EnvironmentModel:
         self.MAX_PEOPLE = 2 #max capacity of simualtion
         self.elev_a_passengers = 0
         self.elev_b_passengers = 0
-        self.t_p = 0 # total passengers that entered the system
-        self.t_l = 0 # total passengers who left the system 
+        self.total_people = 0 # total passengers that entered the system
+        self.total_exits = 0 # total passengers who left the system
+        self.wait_time_a_p1 = 0
+        self.wait_time_a_p2 = 0
+        self.wait_time_b_p1 = 0
+        self.wait_time_b_p2 = 0
+        self.total_wait_times_list = []
 
     
     def state_transition(self, state, action):
@@ -64,24 +69,36 @@ class EnvironmentModel:
             if a_door == OPEN and p1_loc == WAITING and p1_call == a_floor:
                 p1_loc = IN_A
                 self.elev_a_passengers += 1
-                self.t_p += 1
+                self.total_people += 1
+
+                self.wait_time_a_p1 = self.current_time
             
             if a_door == OPEN and p1_loc == IN_A and p1_exit == a_floor:
                 self.people.remove((p1_call, p1_exit, WAITING))
                 p1_call, p1_exit, p1_loc = 0, 0, WAITING
                 self.elev_a_passengers -= 1
-                self.t_l += 1
+                self.total_exits += 1
+
+                if self.wait_time_a_p1 != 0:
+                    self.total_wait_times_list.append(abs(self.current_time - self.wait_time_a_p1))
+                    self.wait_time_a_p1 = 0
 
             if a_door == OPEN and p2_loc == WAITING and p2_call == a_floor:
                 p2_loc = IN_A
                 self.elev_a_passengers += 1
-                self.t_p += 1
+                self.total_people += 1
+
+                self.wait_time_a_p2 = self.current_time
             
             if a_door == OPEN and p2_loc == IN_A and p2_exit == a_floor:
                 self.people.remove((p2_call, p2_exit, WAITING))
                 p2_call, p2_exit, p2_loc = 0, 0, WAITING
                 self.elev_a_passengers -= 1
-                self.t_l += 1
+                self.total_exits += 1
+
+                if self.wait_time_a_p2 != 0:
+                    self.total_wait_times_list.append(abs(self.current_time - self.wait_time_a_p2))
+                    self.wait_time_a_p2 = 0
 
 
         # If action is doors, add or remove passengers given the state of the door and location
@@ -89,25 +106,37 @@ class EnvironmentModel:
             if a_door == OPEN and p1_loc == WAITING and p1_call == a_floor:
                  p1_loc = IN_A
                  self.elev_a_passengers += 1
-                 self.t_p += 1
+                 self.total_people += 1
+
+                 self.wait_time_a_p1 = self.current_time
             
             if a_door == OPEN and p1_loc == IN_A and p1_exit == a_floor:
                 self.people.remove((p1_call, p1_exit, WAITING))
                 p1_call, p1_exit, p1_loc = 0, 0, WAITING
                 self.elev_a_passengers -= 1
-                self.t_l += 1
+                self.total_exits += 1
+
+                if self.wait_time_a_p1 != 0:
+                    self.total_wait_times_list.append(abs(self.current_time - self.wait_time_a_p1))
+                    self.wait_time_a_p1 = 0
 
 
             if a_door == OPEN and p2_loc == WAITING and p2_call == a_floor:
                  p2_loc = IN_A
                  self.elev_a_passengers += 1
-                 self.t_p += 1
+                 self.total_people += 1
+
+                 self.wait_time_a_p2 = self.current_time
             
             if a_door == OPEN and p2_loc == IN_A and p2_exit == a_floor:
                 self.people.remove((p2_call, p2_exit, WAITING))
                 p2_call, p2_exit, p2_loc = 0, 0, WAITING
                 self.elev_a_passengers -= 1
-                self.t_l += 1
+                self.total_exits += 1
+
+                if self.wait_time_a_p2 != 0:
+                    self.total_wait_times_list.append(abs(self.current_time - self.wait_time_a_p2))
+                    self.wait_time_a_p2 = 0
 
 
             # Update door state
@@ -126,51 +155,77 @@ class EnvironmentModel:
             if b_door == OPEN and p1_loc == WAITING and p1_call == b_floor:
                  p1_loc = IN_B
                  self.elev_b_passengers += 1
-                 self.t_p += 1
+                 self.total_people += 1
+
+                 self.wait_time_b_p1 = self.current_time
 
             if b_door == OPEN and p1_loc == IN_B and p1_exit == b_floor:
                 self.people.remove((p1_call, p1_exit, WAITING))
                 p1_call, p1_exit, p1_loc = 0, 0, WAITING
                 self.elev_b_passengers -= 1
-                self.t_l += 1
+                self.total_exits += 1
+
+                if self.wait_time_b_p1 != 0:
+                    self.total_wait_times_list.append(abs(self.current_time - self.wait_time_b_p1))
+                    self.wait_time_b_p1 = 0
 
 
             if b_door == OPEN and p2_loc == WAITING and p2_call == b_floor:
                  p2_loc = IN_B
                  self.elev_b_passengers += 1
-                 self.t_p += 1
+                 self.total_people += 1
+
+                 self.wait_time_b_p2 = self.current_time
 
             if b_door == OPEN and p2_loc == IN_B and p2_exit == b_floor:
                 self.people.remove((p2_call, p2_exit, WAITING))
                 p2_call, p2_exit, p2_loc = 0, 0, WAITING
                 self.elev_b_passengers -= 1
-                self.t_l += 1
+                self.total_exits += 1
+                
+                if self.wait_time_b_p2 != 0:
+                    self.total_wait_times_list.append(abs(self.current_time - self.wait_time_b_p2))
+                    self.wait_time_b_p2 = 0
 
 
         # If action is doors, add or remove passengers given the state of the door and location
         elif action_B[0] == 'DOORS':
             if b_door == OPEN and p1_loc == WAITING and p1_call == b_floor:
-                 p1_loc = IN_B
-                 self.elev_b_passengers += 1
-                 self.t_p += 1
+                p1_loc = IN_B
+                self.elev_b_passengers += 1
+                self.total_people += 1
+
+                self.wait_time_b_p1 = self.current_time
+
+
 
             if b_door == OPEN and p1_loc == IN_B and p1_exit == b_floor:
                 self.people.remove((p1_call, p1_exit, WAITING))
                 p1_call, p1_exit, p1_loc = 0, 0, WAITING
                 self.elev_b_passengers -= 1
-                self.t_l += 1
+                self.total_exits += 1
+
+                if self.wait_time_b_p1 != 0:
+                    self.total_wait_times_list.append(abs(self.current_time - self.wait_time_b_p1))
+                    self.wait_time_b_p1 = 0
 
 
             if b_door == OPEN and p2_loc == WAITING and p2_call == b_floor:
                  p2_loc = IN_B
                  self.elev_b_passengers += 1
-                 self.t_p += 1
+                 self.total_people += 1
+
+                 self.wait_time_b_p2 = self.current_time
            
             if b_door == OPEN and p2_loc == IN_B and p2_exit == b_floor:
                 self.people.remove((p2_call, p2_exit, WAITING))
                 p2_call, p2_exit, p2_loc = 0, 0, WAITING
                 self.elev_b_passengers -= 1
-                self.t_l += 1
+                self.total_exits += 1
+
+                if self.wait_time_b_p2 != 0:
+                    self.total_wait_times_list.append(abs(self.current_time - self.wait_time_b_p2))
+                    self.wait_time_b_p2 = 0
 
             
             # Update door state
@@ -350,7 +405,7 @@ class EnvironmentModel:
                 if abs(n_a_floor - n_p1_exit) < abs(a_floor - p1_exit):
                     reward += MOVEMENT_REWARD
                 else:  
-                    reward -= MOVEMENT_PENALTY
+                    reward -= MOVEMENtotal_peopleENALTY
 
             # If youre in elevator B for p2 ...
             if n_p2_loc == IN_A:
@@ -359,7 +414,7 @@ class EnvironmentModel:
                 if abs(n_a_floor - n_p2_exit) < abs(a_floor - p2_exit):
                     reward += MOVEMENT_REWARD
                 else:   
-                    reward -= MOVEMENT_PENALTY
+                    reward -= MOVEMENtotal_peopleENALTY
 
             # If in new state for p1 they are still waiting for elevator and moved closer, reward.
             if n_p1_loc == WAITING and n_p1_call != 0 and n_p1_exit != 0:
@@ -367,7 +422,7 @@ class EnvironmentModel:
                 if abs(n_a_floor - n_p1_call) < abs(a_floor - p1_call):
                     reward += MOVEMENT_REWARD
                 else:  
-                    reward -= MOVEMENT_PENALTY
+                    reward -= MOVEMENtotal_peopleENALTY
 
             # If in new state for p2 they are still waiting for elevator and moved closer, reward.
             if n_p2_loc == WAITING and n_p2_call != 0 and n_p2_exit != 0:
@@ -375,7 +430,7 @@ class EnvironmentModel:
                 if abs(n_a_floor - n_p2_call) < abs(a_floor - p2_call):
                     reward += MOVEMENT_REWARD
                 else:  
-                    reward -= MOVEMENT_PENALTY
+                    reward -= MOVEMENtotal_peopleENALTY
             
         if action_B[0] == 'UP' or action_B[0] == 'DOWN':
             
@@ -386,7 +441,7 @@ class EnvironmentModel:
                 if abs(n_b_floor - n_p1_exit) < abs(b_floor - p1_exit):
                     reward += MOVEMENT_REWARD
                 else:  
-                    reward -= MOVEMENT_PENALTY
+                    reward -= MOVEMENtotal_peopleENALTY
 
             # If in new state they are in elevator B for p2 ...
             if n_p2_loc == IN_B:
@@ -395,14 +450,14 @@ class EnvironmentModel:
                 if abs(n_b_floor - n_p2_exit) < abs(b_floor - p2_exit):
                     reward += MOVEMENT_REWARD
                 else:  
-                    reward -= MOVEMENT_PENALTY
+                    reward -= MOVEMENtotal_peopleENALTY
 
             # If in new state for p1 they are still waiting for elevator and moved closer, reward.
             if n_p1_loc == WAITING and n_p1_call != 0 and n_p1_exit != 0:
                 if abs(n_b_floor - n_p1_call) < abs(b_floor - p1_call):
                     reward += MOVEMENT_REWARD
                 else:  
-                    reward -= MOVEMENT_PENALTY
+                    reward -= MOVEMENtotal_peopleENALTY
 
             # If in new state for p2 they are still waiting for elevator and moved closer, reward.
             if n_p2_loc == WAITING and n_p2_call != 0 and n_p2_exit != 0:
@@ -410,7 +465,7 @@ class EnvironmentModel:
                 if abs(n_b_floor - n_p2_call) < abs(b_floor - p2_call):
                     reward += MOVEMENT_REWARD
                 else:  
-                    reward -= MOVEMENT_PENALTY
+                    reward -= MOVEMENtotal_peopleENALTY
 
         if action_A[0] == 'DOORS':
             
