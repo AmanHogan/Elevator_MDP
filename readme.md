@@ -41,7 +41,7 @@ In the [globals.py](./ENVIRONMENT/globals.py) file you can change specific param
 For the lambda algorithms, I recommed changing the number of iterations or uncommenting the code in the 
 [globals.py](./ENVIRONMENT/globals.py#ls97) to reduce the state space. 
 
-I each algorithm file, you can change exactly what learning rates, discount factors, and epsilon values you want to graph. You can change these values, as long as you have at least one value in each varaible array Here is what it is set by [default](./2i/agent_q.py#ls97):
+In each algorithm file, you can change exactly what learning rates, discount factors, and epsilon values you want to graph. You can change these values, as long as you have at least one value in each varaible array Here is what it is set by [default](./2i/agent_q.py#ls97):
 
 ```
 # agent_q
@@ -62,6 +62,7 @@ Solutions for each problem are in the ipyb files:
 
 # How to read output and Understand Simulation
 To understand how the simulation works, there are a few things you need to know about the output:
+![img](./sample_output/states.png)
 - The numbers below represent the floors
 
 ```
