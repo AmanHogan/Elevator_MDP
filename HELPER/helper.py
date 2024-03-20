@@ -112,7 +112,7 @@ def print_agent_info(agents, exp_type, problem_no, algo):
         file.write(f"AGENT NUMBER: {i} | EPSILON VAL = {agents[i].explore}\n")
         file.write("Total People that called elevator {}\n".format(agents[i].env.total_people))
         file.write("Total People who arrived at exit floor {}\n".format(agents[i].env.total_exits))
-        file.write(f"AVG time in elevator per person: {round(((sum(agents[i].env.total_wait_times_list) + 1)/(agents[i].env.total_exits + 1)), 2)} SECS or {round(((sum(agents[i].env.total_wait_times_list) + 1)/(agents[i].env.total_exits + 1))/60, 2)} MINS\n")
+        file.write(f"AVG time in elevator per person: {round(((sum(agents[i].env.total_wait_times_list))/(agents[i].env.total_exits + 1)), 2)} SECS or {round(((sum(agents[i].env.total_wait_times_list))/(agents[i].env.total_exits + 1))/60, 2)} MINS\n")
         file.write(f"Total Simulation/Learning time: {round(agents[i].env.current_time,2)} SECS or {round(agents[i].env.current_time/60,2)} MINS or {round((agents[i].env.current_time/60)/60,2)} HOURS\n")
         file.write(f"List of times people spent waiting: {agents[i].env.total_wait_times_list}\n")
         file.write(f"Total people who found their exit: {agents[i].env.total_exits}\n")
